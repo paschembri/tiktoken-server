@@ -1,4 +1,4 @@
-'''
+"""
 Rest service that exposes a single POST endpoint that accepts a JSON object 
 with a  key, "prompt" and an optional key "model", and returns a JSON object with 
 a single key, "tokens" # that has an array of the tokens returned by tiktoken.
@@ -11,7 +11,7 @@ return the tokens returned by tiktoken.tokenize() for the prompt and model.
 
 @Author: howdymic
 
-'''
+"""
 
 
 import json
@@ -21,28 +21,31 @@ import tiktoken
 
 app = Flask(__name__)
 
-@app.route("/tokenize", methods=['POST', 'GET'])
 
+@app.route("/tokenize", methods=["POST", "GET"])
 def token_count():
     data = request.get_json()
-    if not 'prompt' in data:
-      return json.dumps({'tokens': []})
+    if "prompt" not in data:
+        return json.dumps({"tokens": []})
     model = "text-davinci-003"
 
-    if  'model' in data:
-      model = data['model']
+    if "model" in data:
+        model = data["model"]
 
-    print('Model:', model)
-    print('Data:' , data)
-    try :
-        print('Getting encoding for model' + model)
+    print("Model:", model)
+    print("Data:", data)
+    try:
+        print("Getting encoding for model" + model)
         enc = tiktoken.encoding_for_model(model)
-    except :
-        return json.dumps({'error': "Model not found"})
-    return json.dumps({'tokens': enc.encode(data['prompt'])})
+    except Exception:
+        return json.dumps({"error": "Model not found"})
+
+    tokens = enc.encode(data["prompt"])
+    count = len(tokens)
+    return json.dumps({"tokens": tokens, "token_count": count})
 
     if __name__ == "__main__":
-        app.run(host='0.0.0.0')
+        app.run(host="0.0.0.0")
 
 
 # python -m flask --app test.py run
