@@ -10,6 +10,7 @@ return an empty array. If the model is found,
 return the tokens returned by tiktoken.tokenize() for the prompt and model.
 
 @Author: howdymic
+@Contributor: paschembri
 
 """
 
@@ -32,8 +33,6 @@ def token_count():
     if "model" in data:
         model = data["model"]
 
-    print("Model:", model)
-    print("Data:", data)
     try:
         print("Getting encoding for model" + model)
         enc = tiktoken.encoding_for_model(model)
